@@ -1,0 +1,66 @@
+<html>
+<head>
+    <title>Sample App</title>
+    <style>
+        .toggled {
+            background: blue;
+        }
+
+        .fade-in {
+            animation-name: fadein;
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+        }
+
+        .fade-out {
+            animation-name: fadeout;
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+        }
+
+        .fade-out-in {
+            animation-name: fadeoutin;
+            animation-duration: 1s;
+            animation-fill-mode: forwards;
+        }
+
+        .wrapper,
+        .aside {
+            float: left;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid lightgray;
+        }
+
+        .aside {
+            float: left;
+            width: 300px;
+        }
+
+        @keyframes fadein {
+            from {
+              opacity: 0;
+            }
+        }
+
+        @keyframes fadeout {
+            to {
+              opacity: 0;
+            }
+        }
+
+        @keyframes fadeoutin {
+            50% {
+              color: red;
+            }
+            to {
+                color: initial;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id='root'></div>
+    <script src="/static/bundle.js"></script>
+</body>
+</html>
