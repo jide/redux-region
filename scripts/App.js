@@ -118,7 +118,7 @@ const push = {
                 component: Badge,
                 props: {
                     key: 'somekey2',
-                    title: 'no key',
+                    title: 'other test',
                     country: 'Japan',
                     className: 'fade-in'
                 }
