@@ -12,6 +12,7 @@ redux.dispatch(actions.set(payload))
 ````
 
 Dispatches and result :
+````js
 {
     aside: {
         $set: [
