@@ -129,7 +129,7 @@ Finally :
 }
 
 <Region id='aside'/>
-````js
+````
 
 Maybe we want more control :
 ````js
