@@ -18,8 +18,8 @@ export default class Region extends Component {
         className: ''
     }
 
-    constructor(props) {
-        super(props);
+    constructor(...args) {
+        super(...args);
 
         this.renderItem = ::this.renderItem;
     }

@@ -120,6 +120,22 @@ const push = {
     }
 };
 
+const pushBis = {
+    aside: {
+        $push: [
+            {
+                component: Badge,
+                props: {
+                    key: 'another',
+                    title: 'Some other item, with a key',
+                    country: 'Japan, updated',
+                    className: 'fade-in'
+                }
+            }
+        ]
+    }
+};
+
 const pushNoKey = {
     aside: {
         $push: [
@@ -182,7 +198,8 @@ export default class App extends Component {
 
                         <button onClick={ () => redux.dispatch(actions.set(set)) }>Init</button>
                         <button onClick={ () => redux.dispatch(actions.set(update)) }>Update</button>
-                        <button onClick={ () => redux.dispatch(actions.set(push)) }>Push</button>
+                        <button onClick={ () => redux.dispatch(actions.set(push)) }>Push has key</button>
+                        <button onClick={ () => redux.dispatch(actions.set(pushBis)) }>Push same key</button>
                         <button onClick={ () => redux.dispatch(actions.set(pushNoKey)) }>Push no key</button>
                         <button onClick={ () => redux.dispatch(actions.set(pop)) }>Pop</button>
                         <button onClick={ () => redux.dispatch(actions.set(clear)) }>Clear</button>
@@ -194,4 +211,5 @@ export default class App extends Component {
             </Provider>
         );
     }
+
 }
