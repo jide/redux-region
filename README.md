@@ -99,7 +99,7 @@ Then :
 <Region id='aside'>
     <Badge key='initial' title='Hello world, updated !' country='France' className: 'fade-out-in'/>
     <Badge key='another' title='Some other item, with a key' country='Japan' className: 'fade-in'/>
-    <Badge key='another' title='Some other item, with no key' country='Any' className: 'fade-in'/>
+    <Badge title='Some other item, with no key' country='Any' className: 'fade-in'/>
 </Region>
 ````
 Since there is no key, we can push the same item again, it will be added.
