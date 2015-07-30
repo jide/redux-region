@@ -1,6 +1,6 @@
 ### redux + React.addons.update + Region
 
-```npm i && npm install && npm start```
+```npm install && npm start```
 
 A Region component :
 ````js
