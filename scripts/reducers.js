@@ -7,32 +7,29 @@ export function regions(state = {}, action) {
     const { type, ...payload } = action;
 
     if (type === UPDATE_REGION) {
+        let emptyState = {};
+        let uniqueState = {};
+        let nextState;
+
+        for (let regionId in payload) {
+            if (typeof state[regionId] === 'undefined') {
+                emptyState[regionId] = [];
+            }
+        }
+
         try {
-            let emptyState = {};
-            let nextState;
-            let uniqueState;
-
-            for (let regionId in payload) {
-                if (typeof state[regionId] === 'undefined') {
-                    emptyState[regionId] = [];
-                }
-            }
-
             nextState = addons.update({ ...emptyState, ...state }, payload);
-
-            uniqueState = {};
-
-            for (let regionId in nextState) {
-                uniqueState[regionId] = makeUnique(nextState[regionId]);
-            }
-
-            return uniqueState;
         }
         catch(e) {
-            console.error(e.message);
-
+            console.warn(e.message);
             return state;
         }
+
+        for (let regionId in nextState) {
+            uniqueState[regionId] = makeUnique(nextState[regionId]);
+        }
+
+        return uniqueState;
     }
     else {
         return state;

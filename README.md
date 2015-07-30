@@ -77,7 +77,7 @@ Then :
     <Badge key='another' title='Some other item, with a key' country='Japan' className: 'fade-in'/>
 </Region>
 ````
-Because there is a key, we cant push the same item again, it will be updated instead.
+Because there is a key, if we dispatch it again it will move at the end and be updated.
 
 Then :
 ````js
@@ -102,7 +102,7 @@ Then :
     <Badge title='Some other item, with no key' country='Any' className: 'fade-in'/>
 </Region>
 ````
-Since there is no key, we can push the same item again, it will be added.
+Since there is no key, if we dispatch it again, another item will be pushed.
 
 Then :
 ````js
@@ -131,6 +131,33 @@ Finally :
 <Region id='aside'/>
 ````
 
+Crazy stuff :
+````js
+{
+    aside: {
+        $set: [
+            {
+                component: Badge,
+                props: {
+                    key: 'initial',
+                    title: 'Hello world',
+                    country: 'France',
+                    children: [
+                        <small>child</small>
+                    ]
+                }
+            }
+        ]
+    }
+}
+
+<Region id='aside'>
+    <Badge key='initial' title='Hello world' country='France'>
+        <small>child</small>
+    </Badge>
+</Region>
+````
+
 Maybe we want more control :
 ````js
 {
@@ -153,7 +180,7 @@ Maybe we want more control :
 </Region>
 ````
 
-Too bad we cant animate pop... we can (dirty implem) :
+What can we do with middlewares ? Animated pop (dirty implem) :
 ````js
 function animMiddleware(getState) {
     return next => action => {

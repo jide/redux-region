@@ -1,26 +1,30 @@
-export function uniqueBy(arr, getValue) {
-    const unique = [];
-    const found = {};
-    const length = arr.length;
-
-    for (let i = length - 1; i >= 0; i--) {
-        const obj = arr[i];
-        const value = getValue(obj, i);
-
-        if (!found[value]) {
-          found[value] = true;
-          unique.push(obj);
-        }
-    }
-
-    return unique;
-}
-
 export function makeUnique(items) {
     if (Array.isArray(items)) {
-        return uniqueBy(items, (item, i) => {console.log(i, item.props.key, item);
-            return item.props && item.props.key ? item.props.key : i;
-        });
+        const unique = [];
+        const dict = {};
+        const found = {};
+        let item;
+        let key;
+
+        for (let i in items) {
+            item = items[i];
+            key = item.props && item.props.key ? item.props.key : i;
+            dict[key] = item;
+        }
+
+        for (let i = items.length - 1; i >= 0; i--) {
+            item = items[i];
+            if (item) {
+                key = item.props && item.props.key ? item.props.key : i;
+
+                if (!found[key]) {
+                    unique[i] = dict[key];
+                    found[key] = true;
+                }
+            }
+        }
+
+        return unique;
     }
     else {
         return items;

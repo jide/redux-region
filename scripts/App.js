@@ -90,7 +90,7 @@ const set = {
     }
 };
 
-const update = {
+const merge = {
     aside: [
         {
             props: {
@@ -179,6 +179,24 @@ const func = {
     }
 };
 
+const crazy = {
+    aside: {
+        $set: [
+            {
+                component: Badge,
+                props: {
+                    key: 'initial',
+                    title: 'Hello world',
+                    country: 'France',
+                    children: [
+                        <small>child</small>
+                    ]
+                }
+            }
+        ]
+    }
+};
+
 export default class App extends Component {
 
     render() {
@@ -197,13 +215,14 @@ export default class App extends Component {
                         <Region id='bottom' className='bottom'/>
 
                         <button onClick={ () => redux.dispatch(actions.set(set)) }>Init</button>
-                        <button onClick={ () => redux.dispatch(actions.set(update)) }>Update</button>
+                        <button onClick={ () => redux.dispatch(actions.set(merge)) }>Merge</button>
                         <button onClick={ () => redux.dispatch(actions.set(push)) }>Push has key</button>
                         <button onClick={ () => redux.dispatch(actions.set(pushBis)) }>Push same key</button>
                         <button onClick={ () => redux.dispatch(actions.set(pushNoKey)) }>Push no key</button>
                         <button onClick={ () => redux.dispatch(actions.set(pop)) }>Pop</button>
                         <button onClick={ () => redux.dispatch(actions.set(clear)) }>Clear</button>
                         <button onClick={ () => redux.dispatch(actions.set(func)) }>Func</button>
+                        <button onClick={ () => redux.dispatch(actions.set(crazy)) }>Crazy</button>
 
                         <button onClick={ () => redux.dispatch({ type: 'CUSTOM_POP' }) }>Custom pop</button>
                     </div>

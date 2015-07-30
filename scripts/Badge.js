@@ -8,6 +8,8 @@ export default class Badge extends Component {
                 <strong>{ this.props.title }</strong><br/>
                 <em>{ this.props.country }</em>
                 <br/>
+                { this.props.children }
+                <br/>
                 <br/>
             </div>
         );
