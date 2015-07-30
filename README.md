@@ -153,7 +153,7 @@ Crazy stuff :
 
 <Region id='aside'>
     <Badge key='initial' title='Hello world' country='France'>
-    <small>child</small><
+        <small>child</small>
     </Badge>
 </Region>
 ````
