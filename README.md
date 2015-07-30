@@ -77,7 +77,7 @@ Then :
     <Badge key='another' title='Some other item, with a key' country='Japan' className: 'fade-in'/>
 </Region>
 ````
-Because there is a key, we cant push the same item again.
+Because there is a key, we cant push the same item again, it will be updated instead.
 
 Then :
 ````js
@@ -102,7 +102,7 @@ Then :
     <Badge key='another' title='Some other item, with no key' country='Any' className: 'fade-in'/>
 </Region>
 ````
-Since there is no key, we can push the same item again.
+Since there is no key, we can push the same item again, it will be added.
 
 Then :
 ````js
