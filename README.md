@@ -1,6 +1,6 @@
 ### redux + React.addons.update + Region
 
-```npm i && npm install```
+```npm i && npm install && npm start```
 
 A Region component :
 ````js
@@ -153,7 +153,7 @@ Crazy stuff :
 
 <Region id='aside'>
     <Badge key='initial' title='Hello world' country='France'>
-        <small>child</small>
+    <small>child</small><
     </Badge>
 </Region>
 ````
