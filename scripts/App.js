@@ -1,19 +1,15 @@
 import React, {Component} from 'react';
-//import { createRedux } from 'redux';
 import { Provider } from 'redux/react';
+import { createRedux, createDispatcher, composeStores } from 'redux';
+import thunkMiddleware from 'redux/lib/middleware/thunk';
 
-import regionReducer from './regionReducer';
-import * as regionActions from './regionActions';
+import * as reducers from './reducers';
+import * as actions from './actions';
 
 import Region from './Region';
 import Badge from './Badge';
 
-//const redux = createRedux({ regions: regionReducer });
-
-import { createRedux, createDispatcher, composeStores } from 'redux';
-import thunkMiddleware from 'redux/lib/middleware/thunk';
-
-const store = composeStores({ regions: regionReducer });
+const store = composeStores(reducers);
 
 function logMiddleware() {
     return next => action => {
@@ -22,9 +18,6 @@ function logMiddleware() {
     };
 }
 
-// We could use a middleware for cards :
-// action OPEN_CARD could be short circuit for the stack in odl, while
-// staying basic for others.
 function animMiddleware(getState) {
     return next => action => {
         if (action.type === 'CUSTOM_POP') {
@@ -63,10 +56,10 @@ function animMiddleware(getState) {
             };
 
             setTimeout(() => {
-                next({ type: 'UPDATE_REGION', state: popState });
+                next({ type: 'UPDATE_REGION', ...popState });
             }, 1000);
 
-            return next({ type: 'UPDATE_REGION', state: animState });
+            return next({ type: 'UPDATE_REGION', ...animState });
         }
 
         return next(action);
@@ -88,8 +81,8 @@ const set = {
             {
                 component: Badge,
                 props: {
-                    key: 'somekey',
-                    title: 'test',
+                    key: 'initial',
+                    title: 'Hello world',
                     country: 'France'
                 }
             }
@@ -102,8 +95,8 @@ const update = {
         {
             props: {
                 $merge: {
-                    key: 'somekey',
-                    title: 'test title updated',
+                    key: 'initial',
+                    title: 'Hello world, updated !',
                     className: 'fade-out-in'
                 }
             }
@@ -117,8 +110,8 @@ const push = {
             {
                 component: Badge,
                 props: {
-                    key: 'somekey2',
-                    title: 'other test',
+                    key: 'another',
+                    title: 'Some other item, with a key',
                     country: 'Japan',
                     className: 'fade-in'
                 }
@@ -133,7 +126,7 @@ const pushNoKey = {
             {
                 component: Badge,
                 props: {
-                    title: 'no key',
+                    title: 'Some other item, with no key',
                     country: 'Any',
                     className: 'fade-in'
                 }
@@ -187,13 +180,13 @@ export default class App extends Component {
                         <Region id='aside' className='aside'/>
                         <Region id='bottom' className='bottom'/>
 
-                        <button onClick={ () => redux.dispatch(regionActions.set({ type: 'UPDATE_REGION', state: set })) }>Init</button>
-                        <button onClick={ () => redux.dispatch(regionActions.set({ type: 'UPDATE_REGION', state: update })) }>Update</button>
-                        <button onClick={ () => redux.dispatch(regionActions.set({ type: 'UPDATE_REGION', state: push })) }>Push</button>
-                        <button onClick={ () => redux.dispatch(regionActions.set({ type: 'UPDATE_REGION', state: pushNoKey })) }>Push no key</button>
-                        <button onClick={ () => redux.dispatch(regionActions.set({ type: 'UPDATE_REGION', state: pop })) }>Pop</button>
-                        <button onClick={ () => redux.dispatch(regionActions.set({ type: 'UPDATE_REGION', state: clear })) }>Clear</button>
-                        <button onClick={ () => redux.dispatch(regionActions.set({ type: 'UPDATE_REGION', state: func })) }>Func</button>
+                        <button onClick={ () => redux.dispatch(actions.set(set)) }>Init</button>
+                        <button onClick={ () => redux.dispatch(actions.set(update)) }>Update</button>
+                        <button onClick={ () => redux.dispatch(actions.set(push)) }>Push</button>
+                        <button onClick={ () => redux.dispatch(actions.set(pushNoKey)) }>Push no key</button>
+                        <button onClick={ () => redux.dispatch(actions.set(pop)) }>Pop</button>
+                        <button onClick={ () => redux.dispatch(actions.set(clear)) }>Clear</button>
+                        <button onClick={ () => redux.dispatch(actions.set(func)) }>Func</button>
 
                         <button onClick={ () => redux.dispatch({ type: 'CUSTOM_POP' }) }>Custom pop</button>
                     </div>

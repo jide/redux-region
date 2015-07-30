@@ -1,20 +1,26 @@
 import { addons } from 'react/addons';
 import { makeUnique } from './utils';
 
-export default function regionReducer(state = {}, action) {
-    if (action.type === 'UPDATE_REGION') {
-        try {
-            let regions = {};
+import { UPDATE_REGION } from './constants';
 
-            for (let regionId in action.state) {
+export function regions(state = {}, action) {
+    const { type, ...payload } = action;
+
+    if (type === UPDATE_REGION) {
+        try {
+            let emptyState = {};
+            let nextState;
+            let uniqueState;
+
+            for (let regionId in payload) {
                 if (typeof state[regionId] === 'undefined') {
-                    regions[regionId] = [];
+                    emptyState[regionId] = [];
                 }
             }
 
-            let nextState = addons.update({ ...regions, ...state }, action.state);
+            nextState = addons.update({ ...emptyState, ...state }, payload);
 
-            let uniqueState = {};
+            uniqueState = {};
 
             for (let regionId in nextState) {
                 uniqueState[regionId] = makeUnique(nextState[regionId]);
