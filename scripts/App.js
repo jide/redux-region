@@ -6,8 +6,26 @@ import thunkMiddleware from 'redux/lib/middleware/thunk';
 import * as reducers from './reducers';
 import * as actions from './actions';
 
-import Region from './Region';
+import makeRegion from './makeRegion';
+
 import Badge from './Badge';
+
+const Region = makeRegion({
+    Badge
+});
+
+// todo: put payload in payload.update or payload.region
+
+// Update any part of the state
+// + middleware for regions with keys handling ?
+// actions.updateState({
+//   region: {
+//     aside: $set: []
+//   }
+// });
+
+// region actions :
+// put, remove, update, move
 
 const store = composeStores(reducers);
 
@@ -18,58 +36,10 @@ function logMiddleware() {
     };
 }
 
-function animMiddleware(getState) {
-    return next => action => {
-        if (action.type === 'CUSTOM_POP') {
-            const state = getState();
-
-            if (!state.regions || !state.regions.aside) {
-                return;
-            }
-
-            const index = state.regions.aside.length - 1;
-
-            if (index === -1) {
-                return;
-            }
-
-            const region = [];
-
-            region[index] = {
-                props: {
-                    $merge: {
-                        className: 'fade-out'
-                    }
-                }
-            };
-
-            const animState = {
-                aside: region
-            };
-
-            const popState = {
-                aside: {
-                    $splice: [
-                        [-1, 1]
-                    ]
-                }
-            };
-
-            setTimeout(() => {
-                next({ type: 'UPDATE_REGION', ...popState });
-            }, 1000);
-
-            return next({ type: 'UPDATE_REGION', ...animState });
-        }
-
-        return next(action);
-    };
-}
-
 // Create a Dispatcher function for your composite Store:
 const dispatcher = createDispatcher(
   store,
-  getState => [logMiddleware(), animMiddleware(getState), thunkMiddleware(getState)] // Pass the default middleware
+  getState => [logMiddleware(), thunkMiddleware(getState)] // Pass the default middleware //animMiddleware(getState), , updateByKeyMiddleware()
 );
 
 // Create a Redux instance using the dispatcher function:
@@ -79,7 +49,7 @@ const set = {
     aside: {
         $set: [
             {
-                component: Badge,
+                type: 'Badge',
                 props: {
                     key: 'initial',
                     title: 'Hello world',
@@ -90,61 +60,59 @@ const set = {
     }
 };
 
+// Use a middleware to find index 
 const merge = {
-    aside: [
-        {
-            props: {
-                $merge: {
-                    key: 'initial',
-                    title: 'Hello world, updated !',
-                    className: 'fade-out-in'
-                }
-            }
-        }
-    ]
-};
-
-const push = {
     aside: {
-        $push: [
+        $merge: [
             {
-                component: Badge,
                 props: {
-                    key: 'another',
-                    title: 'Some other item, with a key',
-                    country: 'Japan',
-                    className: 'fade-in'
+                    key: 2,
+                    title: 'Hello world, updated key 2 !'
                 }
             }
         ]
     }
 };
 
-const pushBis = {
+const push1 = {
     aside: {
         $push: [
             {
-                component: Badge,
+                type: 'Badge',
                 props: {
-                    key: 'another',
-                    title: 'Some other item, with a key',
-                    country: 'Japan, updated',
-                    className: 'fade-in'
+                    key: 1,
+                    title: 'Some other item, with a key 1',
+                    country: 'Japan'
                 }
             }
         ]
     }
 };
 
-const pushNoKey = {
+const push2 = {
     aside: {
         $push: [
             {
-                component: Badge,
+                type: 'Badge',
                 props: {
-                    title: 'Some other item, with no key',
-                    country: 'Any',
-                    className: 'fade-in'
+                    key: 2,
+                    title: 'Some other item, with a key 2',
+                    country: 'Japan, updated'
+                }
+            }
+        ]
+    }
+};
+
+const push3 = {
+    aside: {
+        $push: [
+            {
+                type: 'Badge',
+                props: {
+                    key: 3,
+                    title: 'Some other item, with a key 3',
+                    country: 'Any'
                 }
             }
         ]
@@ -179,21 +147,34 @@ const func = {
     }
 };
 
-const crazy = {
+const nested = {
     aside: {
-        $set: [
+        $push: [
             {
-                component: Badge,
+                type: 'Badge',
                 props: {
-                    key: 'initial',
+                    key: 'nested',
                     title: 'Hello world',
                     country: 'France',
                     children: [
-                        <small>child</small>
+                        {
+                            type: 'div',
+                            props: {
+                                children: 'I am a child'
+                            }
+                        }
                     ]
                 }
             }
         ]
+    }
+};
+
+const manual = {
+    manual: {
+        $set: {
+            className: 'toggled'
+        }
     }
 };
 
@@ -211,20 +192,23 @@ export default class App extends Component {
                                 </div>
                             ) }
                         </Region>
-                        <Region id='aside' className='aside'/>
-                        <Region id='bottom' className='bottom'/>
-
-                        <button onClick={ () => redux.dispatch(actions.set(set)) }>Init</button>
-                        <button onClick={ () => redux.dispatch(actions.set(merge)) }>Merge</button>
-                        <button onClick={ () => redux.dispatch(actions.set(push)) }>Push has key</button>
-                        <button onClick={ () => redux.dispatch(actions.set(pushBis)) }>Push same key</button>
-                        <button onClick={ () => redux.dispatch(actions.set(pushNoKey)) }>Push no key</button>
-                        <button onClick={ () => redux.dispatch(actions.set(pop)) }>Pop</button>
-                        <button onClick={ () => redux.dispatch(actions.set(clear)) }>Clear</button>
-                        <button onClick={ () => redux.dispatch(actions.set(func)) }>Func</button>
-                        <button onClick={ () => redux.dispatch(actions.set(crazy)) }>Crazy</button>
-
-                        <button onClick={ () => redux.dispatch({ type: 'CUSTOM_POP' }) }>Custom pop</button>
+                        <Region id='aside' animate={ { transitionAppear: true, transitionMoveAppear: true, transitionMoveLeave: false, transitionName: 'fade' } } className='aside'/>
+                        <Region id='manual' className='manual' manualUpdate={ (self, state) => React.findDOMNode(self).classList.add(state.className) }>
+                            <div>hello</div>
+                        </Region>
+                        <div style={ { float: 'right' } }>
+                            region A :<br/>
+                            <button onClick={ () => redux.dispatch(actions.set(func)) }>Func</button><br/><br/>
+                            region B :<br/>
+                            <button onClick={ () => redux.dispatch(actions.set(set)) }>Set</button><br/>
+                            <button onClick={ () => redux.dispatch(actions.set(push1)) }>Push 1</button><br/>
+                            <button onClick={ () => redux.dispatch(actions.set(push2)) }>Push 2</button><br/>
+                            <button onClick={ () => redux.dispatch(actions.set(push3)) }>Push 3</button><br/>
+                            <button onClick={ () => redux.dispatch(actions.set(nested)) }>Push 4 with children</button><br/>
+                            <button onClick={ () => redux.dispatch(actions.set(pop)) }>Pop</button><br/>
+                            <button onClick={ () => redux.dispatch(actions.set(clear)) }>Clear both</button><br/>
+                            <button onClick={ () => redux.dispatch(actions.set(manual)) }>Manual</button><br/>
+                        </div>
                     </div>
                 )}
             </Provider>

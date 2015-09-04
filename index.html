@@ -2,61 +2,77 @@
 <head>
     <title>Sample App</title>
     <style>
-        .toggled {
-            background: blue;
-        }
+    .toggled {
+        background: blue;
+    }
 
-        .fade-in {
-            animation-name: fadein;
-            animation-duration: 1s;
-            animation-fill-mode: forwards;
-        }
+    .wrapper,
+    .aside,
+    .manual {
+        float: left;
+        margin: 20px;
+        padding: 20px;
+        border: 1px solid lightgray;
+    }
 
-        .fade-out {
-            animation-name: fadeout;
-            animation-duration: 1s;
-            animation-fill-mode: forwards;
-        }
+    .aside {
+        float: left;
+        width: 300px;
+        min-height: 600px;
+    }
 
-        .fade-out-in {
-            animation-name: fadeoutin;
-            animation-duration: 1s;
-            animation-fill-mode: forwards;
-        }
+    .fade-enter {
+      transform-origin: top;
+      transform: scaleY(0);
+      animation-duration: .5s;
+      animation-fill-mode: both;
+      animation-play-state: paused;
+    }
 
-        .wrapper,
-        .aside {
-            float: left;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid lightgray;
-        }
+    .fade-appear {
+        transform-origin: top;
+      transform: scaleY(0);
+      animation-duration: .5s;
+      animation-fill-mode: both;
+      animation-play-state: paused;
+    }
 
-        .aside {
-            float: left;
-            width: 300px;
-        }
+    .fade-leave {
+        transform-origin: top;
+      animation-duration: .5s;
+      animation-fill-mode: both;
+      animation-play-state: paused;
+    }
 
-        @keyframes fadein {
-            from {
-              opacity: 0;
-            }
-        }
+    .fade-enter.fade-enter-active {
+      animation-name: fadeIn;
+      animation-play-state: running;
+    }
 
-        @keyframes fadeout {
-            to {
-              opacity: 0;
-            }
-        }
+    .fade-appear.fade-appear-active {
+      animation-name: fadeIn;
+      animation-play-state: running;
+    }
 
-        @keyframes fadeoutin {
-            50% {
-              color: red;
-            }
-            to {
-                color: initial;
-            }
-        }
+    .fade-leave.fade-leave-active {
+      animation-name: fadeOut;
+      animation-play-state: running;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        transform: scaleY(0);
+      }
+      100% {
+        transform: scaleY(1);
+      }
+    }
+
+    @keyframes fadeOut {
+      100% {
+        transform: scaleY(0);
+      }
+    }
     </style>
 </head>
 <body>

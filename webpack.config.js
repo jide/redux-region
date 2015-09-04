@@ -64,6 +64,9 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ],
   module: {
+    noParse: [
+      /clone-deep/
+    ],
     loaders: [
       {
         test: /\.jsx?$/,

@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 
 export default class Badge extends Component {
 
+    static defaultProps = {
+        title: 'test'
+    }
+
     render() {
         return (
-            <div className={ this.props.className }>
+            <div style={ this.props.style } className={ 'plop ' + this.props.className }>
                 <strong>{ this.props.title }</strong><br/>
                 <em>{ this.props.country }</em>
                 <br/>

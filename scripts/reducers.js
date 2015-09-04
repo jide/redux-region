@@ -4,6 +4,7 @@ import { makeUnique } from './utils';
 import { UPDATE_REGION } from './constants';
 
 export function regions(state = {}, action) {
+    // todo: put payload in payload.update
     const { type, ...payload } = action;
 
     if (type === UPDATE_REGION) {
@@ -22,6 +23,7 @@ export function regions(state = {}, action) {
         }
         catch(e) {
             console.warn(e.message);
+            console.log(e.stack);
             return state;
         }
 

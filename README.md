@@ -4,6 +4,14 @@
 
 A Region component :
 ````js
+import makeRegion from './makeRegion';
+import Badge from './Badge';
+
+// Register the components you want to be able to mount in Regions here
+const Region = makeRegion({
+    Badge, ...
+});
+
 <Region id='aside'/>
 ````
 One action :
@@ -17,7 +25,7 @@ Dispatches and result :
     aside: {
         $set: [
             {
-                component: Badge,
+                component: 'Badge',
                 props: {
                     key: 'initial',
                     title: 'Hello world',
@@ -60,7 +68,7 @@ Then :
     aside: {
         $push: [
             {
-                component: Badge,
+                component: 'Badge',
                 props: {
                     key: 'another',
                     title: 'Some other item, with a key',
@@ -85,7 +93,7 @@ Then :
     aside: {
         $push: [
             {
-                component: Badge,
+                component: 'Badge',
                 props: {
                     title: 'Some other item, with no key',
                     country: 'Any',
@@ -131,19 +139,24 @@ Finally :
 <Region id='aside'/>
 ````
 
-Crazy stuff :
+Nested children :
 ````js
 {
     aside: {
         $set: [
             {
-                component: Badge,
+                component: 'Badge',
                 props: {
                     key: 'initial',
                     title: 'Hello world',
                     country: 'France',
                     children: [
-                        <small>child</small>
+                        {
+                            type: 'small',
+                            props: {
+                                children: 'I am a child'
+                            }
+                        }
                     ]
                 }
             }
@@ -153,7 +166,7 @@ Crazy stuff :
 
 <Region id='aside'>
     <Badge key='initial' title='Hello world' country='France'>
-        <small>child</small>
+        <small>I am a child</small>
     </Badge>
 </Region>
 ````
@@ -180,53 +193,22 @@ Maybe we want more control :
 </Region>
 ````
 
-What can we do with middlewares ? Animated pop (dirty implem) :
+Renders are too slow ! Manual rendering :
 ````js
-function animMiddleware(getState) {
-    return next => action => {
-        if (action.type === 'CUSTOM_POP') {
-            const state = getState();
-
-            if (!state.regions || !state.regions.aside) {
-                return;
-            }
-
-            const index = state.regions.aside.length - 1;
-
-            if (index === -1) {
-                return;
-            }
-
-            const region = [];
-
-            region[index] = {
-                props: {
-                    $merge: {
-                        className: 'fade-out'
-                    }
-                }
-            };
-
-            const animState = {
-                aside: region
-            };
-
-            const popState = {
-                aside: {
-                    $splice: [
-                        [-1, 1]
-                    ]
-                }
-            };
-
-            setTimeout(() => {
-                next({ type: 'UPDATE_REGION', ...popState });
-            }, 1000);
-
-            return next({ type: 'UPDATE_REGION', ...animState });
+{
+    wrapper: {
+        $set: {
+            className: 'toggled'
         }
-
-        return next(action);
-    };
+    }
 }
+
+<Region id='manual' manualUpdate={ (self, state) => React.findDOMNode(self).classList.add(state.className) }>
+    <div>hello</div>
+</Region>
+````
+
+We want animations ! You can use CSS classes, or the builtin animation to animate enter / leave / change position
+````js
+<Region animate={ { transitionName: 'fade' } }/>
 ````
