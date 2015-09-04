@@ -44,27 +44,6 @@ Dispatches and result :
 Then :
 ````js
 {
-    aside: [
-        {
-            props: {
-                $merge: {
-                    key: 'initial',
-                    title: 'Hello world, updated !',
-                    className: 'fade-out-in'
-                }
-            }
-        }
-    ]
-}
-
-<Region id='aside'>
-    <Badge key='initial' title='Hello world, updated !' country='France' className: 'fade-out-in'/>
-</Region>
-````
-
-Then :
-````js
-{
     aside: {
         $push: [
             {

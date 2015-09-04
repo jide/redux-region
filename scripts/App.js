@@ -180,6 +180,14 @@ const manual = {
 
 export default class App extends Component {
 
+    constructor(...args) {
+        super(...args);
+
+        this.state = {
+            animation: false
+        };
+    }
+
     render() {
         return (
             <Provider redux={redux}>
@@ -192,7 +200,7 @@ export default class App extends Component {
                                 </div>
                             ) }
                         </Region>
-                        <Region id='aside' animate={ { transitionAppear: true, transitionMoveAppear: true, transitionMoveLeave: false, transitionName: 'fade' } } className='aside'/>
+                        <Region id='aside' animate={ this.state.animation ? { transitionAppear: true, transitionMoveAppear: true, transitionMoveLeave: false, transitionName: 'fade' } : null } className='aside'/>
                         <Region id='manual' className='manual' manualUpdate={ (self, state) => React.findDOMNode(self).classList.add(state.className) }>
                             <div>hello</div>
                         </Region>
@@ -207,7 +215,9 @@ export default class App extends Component {
                             <button onClick={ () => redux.dispatch(actions.set(nested)) }>Push 4 with children</button><br/>
                             <button onClick={ () => redux.dispatch(actions.set(pop)) }>Pop</button><br/>
                             <button onClick={ () => redux.dispatch(actions.set(clear)) }>Clear both</button><br/>
-                            <button onClick={ () => redux.dispatch(actions.set(manual)) }>Manual</button><br/>
+                            <button onClick={ () => redux.dispatch(actions.set(manual)) }>Manual</button><br/><br/>
+
+                            <button onClick={ () => this.setState({ animation: !this.state.animation }) }>Animations are { this.state.animation ? 'on' : 'off' }</button><br/><br/>
                         </div>
                     </div>
                 )}
